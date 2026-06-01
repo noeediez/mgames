@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MGames – Organización de Eventos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --negro: #0d0d0d;
+      --amarillo: #f5c400;
+      --amarillo2: #ffdd55;
+      --blanco: #f9f5ee;
+      --gris: #1a1a1a;
+      --gris2: #2a2a2a;
+      --texto: #e8e0d0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--negro);
+      color: var(--texto);
+      font-family: 'Nunito', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(13,13,13,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(245,196,0,0.15);
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 3px;
+      color: var(--amarillo);
+    }
+    .logo span { color: var(--blanco); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 36px;
+    }
+    nav ul a {
+      color: var(--texto);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--amarillo); }
+
+    .nav-cta {
+      background: var(--amarillo);
+      color: var(--negro) !important;
+      padding: 10px 22px;
+      border-radius: 4px;
+      font-weight: 800 !important;
+    }
+    .nav-cta:hover { background: var(--amarillo2); color: var(--negro) !important; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(245,196,0,0.08) 0%, transparent 70%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 60px,
+          rgba(245,196,0,0.03) 60px,
+          rgba(245,196,0,0.03) 61px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 60px,
+          rgba(245,196,0,0.03) 60px,
+          rgba(245,196,0,0.03) 61px
+        );
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: var(--amarillo);
+      color: var(--negro);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 2px;
+      margin-bottom: 28px;
+      animation: fadeDown 0.7s ease both;
+    }
+
+    #hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 12vw, 9rem);
+      line-height: 0.95;
+      letter-spacing: 4px;
+      color: var(--blanco);
+      animation: fadeDown 0.8s 0.1s ease both;
+    }
+
+    #hero h1 em {
+      color: var(--amarillo);
+      font-style: normal;
+      display: block;
+    }
+
+    .hero-sub {
+      margin-top: 28px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: rgba(232,224,208,0.7);
+      max-width: 560px;
+      line-height: 1.6;
+      animation: fadeDown 0.8s 0.2s ease both;
+    }
+
+    .hero-btns {
+      margin-top: 44px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeDown 0.8s 0.3s ease both;
+    }
+
+    .btn-primary {
+      background: var(--amarillo);
+      color: var(--negro);
+      padding: 16px 38px;
+      font-weight: 800;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--amarillo2); transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--blanco);
+      padding: 16px 38px;
+      font-weight: 800;
+      font-size: 1rem;
+      border: 2px solid rgba(249,245,238,0.3);
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    }
+    .btn-outline:hover { border-color: var(--amarillo); color: var(--amarillo); transform: translateY(-2px); }
+
+    .hero-stats {
+      margin-top: 72px;
+      display: flex;
+      gap: 60px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeDown 0.8s 0.45s ease both;
+    }
+
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.2rem;
+      color: var(--amarillo);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(232,224,208,0.5);
+      margin-top: 4px;
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 100px 48px; }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--amarillo);
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      letter-spacing: 2px;
+      line-height: 1;
+      color: var(--blanco);
+      margin-bottom: 20px;
+    }
+
+    .section-desc {
+      font-size: 1.05rem;
+      color: rgba(232,224,208,0.6);
+      max-width: 540px;
+      line-height: 1.7;
+    }
+
+    /* ── EVENTOS ── */
+    #eventos {
+      background: var(--gris);
+    }
+
+    .eventos-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 60px;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .eventos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2px;
+    }
+
+    .evento-card {
+      background: var(--gris2);
+      padding: 44px 36px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+      cursor: default;
+    }
+
+    .evento-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 3px;
+      width: 0;
+      background: var(--amarillo);
+      transition: width 0.4s ease;
+    }
+    .evento-card:hover { background: #222; }
+    .evento-card:hover::after { width: 100%; }
+
+    .evento-icon {
+      font-size: 2.4rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .evento-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      color: var(--blanco);
+      margin-bottom: 12px;
+    }
+
+    .evento-card p {
+      font-size: 0.92rem;
+      color: rgba(232,224,208,0.55);
+      line-height: 1.65;
+    }
+
+    /* ── CÓMO FUNCIONA ── */
+    #como {
+      background: var(--negro);
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 48px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 40px;
+      margin-top: 60px;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      color: rgba(245,196,0,0.12);
+      line-height: 1;
+      transition: color 0.3s;
+    }
+    .step:hover .step-num { color: rgba(245,196,0,0.35); }
+
+    .step h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 1.5px;
+      color: var(--blanco);
+    }
+
+    .step p {
+      font-size: 0.9rem;
+      color: rgba(232,224,208,0.55);
+      line-height: 1.65;
+    }
+
+    /* ── FAQ ── */
+    #faq {
+      background: var(--gris);
+      padding: 100px 48px;
+    }
+
+    .faq-inner {
+      max-width: 860px;
+      margin: 60px auto 0;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid rgba(245,196,0,0.1);
+    }
+
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--blanco);
+      text-align: left;
+      padding: 24px 0;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: color 0.2s;
+    }
+    .faq-q:hover { color: var(--amarillo); }
+
+    .faq-arrow {
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+      color: var(--amarillo);
+      flex-shrink: 0;
+    }
+    .faq-item.open .faq-arrow { transform: rotate(45deg); }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s;
+    }
+    .faq-item.open .faq-a { max-height: 200px; padding-bottom: 20px; }
+
+    .faq-a p {
+      font-size: 0.95rem;
+      color: rgba(232,224,208,0.6);
+      line-height: 1.7;
+    }
+
+    /* ── CONTACTO ── */
+    #contacto {
+      background: var(--negro);
+      padding: 100px 48px;
+      text-align: center;
+    }
+
+    .contacto-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .contacto-inner h2 { margin-bottom: 16px; }
+    .contacto-inner .section-desc { margin: 0 auto 48px; text-align: center; }
+
+    .contacto-form {
+      display: grid;
+      gap: 16px;
+      text-align: left;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(232,224,208,0.5);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: var(--gris2);
+      border: 1px solid rgba(245,196,0,0.1);
+      border-radius: 4px;
+      color: var(--blanco);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      padding: 14px 18px;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--amarillo);
+    }
+
+    .form-group select option { background: var(--gris2); }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+
+    .form-submit {
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #080808;
+      border-top: 1px solid rgba(245,196,0,0.1);
+      padding: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 3px;
+      color: var(--amarillo);
+    }
+    .footer-logo span { color: var(--blanco); }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: rgba(232,224,208,0.45);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--amarillo); }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: rgba(232,224,208,0.25);
+      width: 100%;
+      text-align: center;
+      margin-top: 16px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(245,196,0,0.06);
+    }
+
+    /* whatsapp float */
+    .wa-float {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 200;
+      background: #25d366;
+      color: #fff;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      text-decoration: none;
+      box-shadow: 0 4px 24px rgba(37,211,102,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 32px rgba(37,211,102,0.5); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      nav ul { display: none; }
+      section, #como, #faq, #contacto { padding: 72px 24px; }
+      footer { padding: 36px 24px; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-stats { gap: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">M<span>GAMES</span></div>
+  <ul>
+    <li><a href="#eventos">Eventos</a></li>
+    <li><a href="#como">Cómo funciona</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contacto" class="nav-cta">Consultá</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <span class="hero-tag">📍 Buenos Aires &amp; GBA · Viajamos a todo el país</span>
+  <h1>LA FIESTA<em>empieza acá</em></h1>
+  <p class="hero-sub">Organizamos eventos con juegos dinámicos para empresas, sociales, bodas y despedidas. Nos adaptamos a cualquier espacio, nos encargamos de todo.</p>
+  <div class="hero-btns">
+    <a href="#contacto" class="btn-primary">Pedí tu propuesta</a>
+    <a href="#eventos" class="btn-outline">Ver eventos</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">+500</div><div class="stat-label">Eventos realizados</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">Personas mínimo</div></div>
+    <div class="stat"><div class="stat-num">2hs</div><div class="stat-label">Duración promedio</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Adaptable</div></div>
+  </div>
+</section>
+
+<!-- EVENTOS -->
+<section id="eventos">
+  <div class="eventos-header reveal">
+    <div>
+      <span class="section-label">Tipos de evento</span>
+      <h2>¿PARA QUÉ<br>OCASIÓN?</h2>
+    </div>
+    <p class="section-desc">Diseñamos la propuesta según el grupo, la edad y el objetivo. Cada evento es único.</p>
+  </div>
+
+  <div class="eventos-grid">
+    <div class="evento-card reveal">
+      <span class="evento-icon">🎉</span>
+      <h3>Sociales</h3>
+      <p>Para el grupo de siempre o para reunir personas que no se conocen. Rompemos el hielo y armamos un momento que se recuerda.</p>
+    </div>
+    <div class="evento-card reveal">
+      <span class="evento-icon">💼</span>
+      <h3>Empresariales</h3>
+      <p>Team building, kick-off, fin de año. Juegos que generan trabajo en equipo, risas y conexión real entre compañeros.</p>
+    </div>
+    <div class="evento-card reveal">
+      <span class="evento-icon">💍</span>
+      <h3>Bodas</h3>
+      <p>La manifestación del amor se acompaña con diversión. Actividades que suman energía y emoción a tu gran día.</p>
+    </div>
+    <div class="evento-card reveal">
+      <span class="evento-icon">🥂</span>
+      <h3>Despedidas</h3>
+      <p>Algo disruptivo y diferente, que haga sentir a todos presentes. La despedida que todos van a contar.</p>
+    </div>
+    <div class="evento-card reveal">
+      <span class="evento-icon">⚡</span>
+      <h3>Jóvenes</h3>
+      <p>Juegos muy dinámicos donde pueden liberar toda su energía. Rápidos, físicos, competitivos y llenos de adrenalina.</p>
+    </div>
+    <div class="evento-card reveal">
+      <span class="evento-icon">🔦</span>
+      <h3>Eventos Nocturnos</h3>
+      <p>Se va el sol, pero se prenden las luces. Eventos con impronta fluorescente para cualquier tipo de celebración.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section id="como">
+  <div class="reveal">
+    <span class="section-label">El proceso</span>
+    <h2>CÓMO<br>FUNCIONA</h2>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <h3>Nos contás</h3>
+      <p>Tipo de evento, cantidad de personas, fecha, ubicación y espacio disponible. Con eso ya tenemos todo lo que necesitamos.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">02</div>
+      <h3>Te armamos la propuesta</h3>
+      <p>Diseñamos una propuesta a tu medida según el grupo, la duración y lo que buscás lograr.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">03</div>
+      <h3>El día del evento</h3>
+      <p>Llegamos, ponemos toda la energía y se arma el fiestón. Nosotros nos encargamos de absolutamente todo.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">04</div>
+      <h3>Vamos a donde sea</h3>
+      <p>El evento se hace donde dispongan ustedes. Nos adaptamos a interiores, exteriores, salones o jardines.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="reveal" style="text-align:center;">
+    <span class="section-label">Preguntas frecuentes</span>
+    <h2>FAQ</h2>
+  </div>
+  <div class="faq-inner">
+    <div class="faq-item reveal">
+      <button class="faq-q">¿Cuánto dura un evento? <span class="faq-arrow">+</span></button>
+      <div class="faq-a"><p>El evento promedio dura 2 horas. Podemos armar propuestas de mayor o menor duración de acuerdo a lo que busquen.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-q">¿Para qué edades trabajan? <span class="faq-arrow">+</span></button>
+      <div class="faq-a"><p>¡La diversión no tiene límites! Trabajamos para jóvenes, adultos y grupos mixtos. Adaptamos los juegos a cada grupo.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-q">¿Cuántas personas se necesitan? <span class="faq-arrow">+</span></button>
+      <div class="faq-a"><p>El mínimo recomendado es de 8 a 10 personas. No hay límite máximo, armamos la propuesta para grupos grandes también.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-q">¿Se puede hacer en cualquier lugar? <span class="faq-arrow">+</span></button>
+      <div class="faq-a"><p>¡Claro! El evento se realiza en el lugar que dispongan ustedes. Vamos a cualquier lado. Nos adaptamos a interiores y exteriores.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-q">¿Pueden armar una propuesta personalizada? <span class="faq-arrow">+</span></button>
+      <div class="faq-a"><p>Sí, armamos una propuesta a tu medida. Contanos el tipo de evento, cantidad de personas y qué estás buscando y nosotros nos encargamos.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="contacto-inner">
+    <div class="reveal">
+      <span class="section-label">Escribinos</span>
+      <h2>PEDÍ TU<br>PROPUESTA</h2>
+      <p class="section-desc">Completá el formulario y te respondemos a la brevedad con una propuesta a medida.</p>
+    </div>
+    <form class="contacto-form reveal" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" placeholder="Tu nombre" required />
+        </div>
+        <div class="form-group">
+          <label>Teléfono / WhatsApp</label>
+          <input type="tel" placeholder="+54 11 ..." />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="tu@email.com" required />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tipo de evento</label>
+          <select>
+            <option value="">Seleccioná...</option>
+            <option>Social / Cumpleaños</option>
+            <option>Empresarial / Team building</option>
+            <option>Boda</option>
+            <option>Despedida</option>
+            <option>Jóvenes</option>
+            <option>Evento nocturno</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Cantidad de personas</label>
+          <input type="number" placeholder="Ej: 25" min="1" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Mensaje</label>
+        <textarea placeholder="Contanos la fecha, el lugar y lo que tenés en mente..."></textarea>
+      </div>
+      <div class="form-submit">
+        <button type="submit" class="btn-primary">Enviar consulta →</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">M<span>GAMES</span></div>
+  <nav class="footer-links">
+    <a href="#eventos">Eventos</a>
+    <a href="#como">Cómo funciona</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+  <p class="footer-copy">© 2025 MGames – Organización de Eventos en Buenos Aires. Todos los derechos reservados.</p>
+</footer>
+
+<!-- WhatsApp flotante -->
+<a class="wa-float" href="https://wa.me/5491100000000" target="_blank" title="Escribinos por WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<script>
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]');
+    btn.textContent = '✓ ¡Consulta enviada!';
+    btn.style.background = '#2a9d5c';
+    btn.style.color = '#fff';
+    setTimeout(() => {
+      btn.textContent = 'Enviar consulta →';
+      btn.style.background = '';
+      btn.style.color = '';
+      e.target.reset();
+    }, 3000);
+  }
+</script>
+</body>
+</html>
